@@ -1,0 +1,16 @@
+# For every application which uses readline
+set editing-mode vi
+$if mode=vi
+    set keymap vi-command
+    # these are for vi-command mode
+    "\C-l": clear-screen
+    set keymap vi-insert
+    # these are for vi-insert mode
+    "\C-l": clear-screen
+$endif
+
+# If only wanted for bash
+# Within .bashrc
+# set -o vi
+# bind -m vi-command '"\C-l": clear-screen'
+# bind -m vi-insert '"\C-l": clear-screen'
