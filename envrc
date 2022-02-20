@@ -1,0 +1,18 @@
+# Variables
+export EDITOR=vim
+export TRANSFER=${HOME}/transfer
+
+# Aliases
+alias vim="vim -S ~/.vimrc"
+
+# Setting up the environment
+[ ! -d ${TRANSFER} ] && mkdir -p ${TRANSFER}
+
+# Functions
+function transfer(){
+  if [ $# -eq 2 ]; then
+    cp "$1" ${TRANSFER}
+  elif [ $# -eq 1 ]; then
+    cd ${TRANSFER}
+  fi
+}
