@@ -1,6 +1,6 @@
 # Variables
 export EDITOR=vim
-export TRANSFER=${HOME}/transfer
+export TRANSFER="${HOME}/transfer"
 
 # Aliases
 alias vim="vim -S ~/.vimrc"
@@ -10,9 +10,20 @@ alias vim="vim -S ~/.vimrc"
 
 # Functions
 function transfer(){
-  if [ $# -eq 2 ]; then
+  if [ $# -eq 1 ]; then
     cp "$1" ${TRANSFER}
-  elif [ $# -eq 1 ]; then
+  elif [ $# -eq 0 ]; then
     cd ${TRANSFER}
+  else
+    echo -e "Usage: $(basename $0) [<file>]"
   fi
 }
+
+# zsh configuration
+if [ "${SHELL##*/}" = "zsh" ]; then
+    SHARE="/usr/share"
+    [ -f "${SHARE}/zsh-autosuggestions" ] && source "${SHARE}/zsh-autosuggestions"
+    [ -f "${SHARE}/zsh-syntax-highlighting" ] && source "${SHARE}/zsh-syntax-highlighting"
+    source "${SHARE}/zsh-vim-mode/zsh-vim-mode.plugin.zsh" 2>/dev/null || bindkey -v
+    # https://github.com/softmoth/zsh-vim-mode
+fi
