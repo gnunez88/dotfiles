@@ -7,7 +7,7 @@ printenv PATH | grep -q "${HOME}/go/bin" || PATH="${HOME}/go/bin":$PATH
 export PATH
 
 # Aliases
-alias vim="vim -S ~/.vimrc"
+alias vim="vim -S ~/.vim/vimrc"
 alias ...="setxkbmap es dvorak -option && setxkbmap -option ctrl:swapcaps,shift:both_capslock"
 
 # Setting up the environment
@@ -49,6 +49,17 @@ function cpinfo() {
     rmcolour $1 | xclip -sel clip
 }
 #export -f cpinfo
+
+# Create the directory structure to start a pentest
+function mkt() {
+    if [ $# -eq 0 ]; then
+        BASEDIR="$(pwd)"
+    elif [ $# -eq 1 ]; then
+        BASEDIR="$(realpath $1)"
+    fi
+    [ ${#BASEDIR} -gt 0 ] && mkdir -p ${BASEDIR}/{info,enum,gain,post,files}
+}
+#export -f mkt
 
 # Decompressing a zlib file using gzip
 function zlibd() {
