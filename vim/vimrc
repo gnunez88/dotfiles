@@ -22,6 +22,7 @@ set autoindent smartindent
 set hidden autowrite autoread lazyredraw
 set formatoptions+=j
 set fileformat=unix
+set backup backupdir=${HOME}/.vim/backups
 
 noremap  Y y$
 noremap  <C-c> <Esc>
@@ -37,3 +38,5 @@ nnoremap gV `[v`]
 vnoremap < <gv
 vnoremap > >gv
 inoremap <C-l> <Esc>lDA
+
+"colorscheme desert

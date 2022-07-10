@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Backing up old files/directories
-cp -Rf $(realpath $(dirname $0)/vim) ${HOME}/.vim
+cp -Rf $(realpath $(dirname $0)/vim) ${HOME}/.vim/backups
 cp  -f $(realpath $(dirname $0)/inputrc) ${HOME}/.inputrc
 cp  -f $(realpath $(dirname $0)/tmux.conf) ${HOME}/.tmux.conf
 cp  -f $(realpath $(dirname $0)/envrc) ${HOME}/.envrc
