@@ -40,6 +40,7 @@ function backup_current_settings () {
 # Setting up new dotfiles
 function set_up_dotfiles () {
     QUIET="${1:-false}"
+    [[ -d ${HOME}/.vim ]] && rm -Rf ${HOME}/.vim  # If it is not removed the new one is copied inside
     cp -Rf $(realpath $(dirname $0)/vim) ${HOME}/.vim && mkdir -p ${HOME}/.vim/backups \
         && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}${HOME}/.vim set${RST_MSG}") \
         || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}${HOME}/.vim could not be set${RST_MSG}")
@@ -67,8 +68,8 @@ function clear_backups () {
         && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}${HOME}/.inputrc.bak removed${RST_MSG}") \
         || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}${HOME}/.inputrc.bak could not be removed${RST_MSG}"))
     [[ -f ${HOME}/.envrc.bak ]] && (rm -Rf ${HOME}/.envrc.bak \
-        && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}${HOME}/.inputrc.bak removed${RST_MSG}") \
-        || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}${HOME}/.inputrc.bak could not be removed${RST_MSG}"))
+        && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}${HOME}/.envrc.bak removed${RST_MSG}") \
+        || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}${HOME}/.envrc.bak could not be removed${RST_MSG}"))
 }
 
 # Detecting wether bash is used or zsh
