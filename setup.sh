@@ -1,8 +1,10 @@
 #!/bin/bash
 
 # Variables
+## Generic variables
 ERR_MSG="\e[1;37;41m"
 GOOD_MSG="\e[1;32m"
+INFO_MSG="\e[0;34m"
 RST_MSG="\e[0m"
 
 # Functions

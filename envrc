@@ -4,6 +4,8 @@ export TRANSFER="${HOME}/transfer"
 ## PATH
 printenv PATH | grep -q "${HOME}/\.local/bin" || PATH="${HOME}/.local/bin":$PATH
 printenv PATH | grep -q "${HOME}/go/bin" || PATH="${HOME}/go/bin":$PATH
+MSF_EXPLOIT_TOOLS="/usr/share/metasploit-framework/tools/exploit"
+printenv PATH | grep -q "metasploit" || PATH=$PATH:"${MSF_EXPLOIT_TOOLS}"
 export PATH
 
 # Aliases

@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+
+# Variables
+## Generic variables
+ERR_MSG="\e[1;37;41m"
+GOOD_MSG="\e[1;32m"
+INFO_MSG="\e[0;34m"
+RST_MSG="\e[0m"
+## Special variables
+PYENV_ROOT="${HOME}/.pyenv"
+CONFIG_FILE="${HOME}/.${SHELL##*/}rc"  # Config files suported: bash and zsh
+
+# Functions
+function usage () {
+    ERR_CODE="${1:-0}"
+    echo -e "Usage: $(basename $0) [-q] [-r]" >&2
+    echo -e "   -q\tQuiet mode" >&2
+    echo -e "   -r\tRemove pyenv" >&2
+    exit ${ERR_CODE}
+}
+
+
+function do_quietly () {
+	eval "${1} >/dev/null 2>&1"
+}
+
+
+## Removing project if exists
+function remove_pyenv () {
+	QUIET="${1:-false}"
+	if [ ! -d ${PYENV_ROOT} ]; then
+		[[ "${QUIET}" = "false" ]] \
+			&& echo -e "${ERR_MSG}\"${PYENV_ROOT}\" not found, aborting...${RST_MSG}"
+	else
+        rm -Rf "${PYENV_ROOT}"
+        if [[ $? -eq 0 ]]; then
+            [[ "${QUIET}" = "false" ]] \
+                && echo -e "${GOOD_MSG}Done!${RST_MSG}" \
+                || echo -e "${ERR_MSG}Error!${RST_MSG}"
+            exit 1
+        fi
+	fi
+}
+
+
+## Downloading the project
+function download_pyenv () {
+	QUIET="${1:-false}"
+	if [ ! -d ${PYENV_ROOT} ]; then
+		[[ "${QUIET}" = "false" ]] \
+			&& echo -e "${INFO_MSG}\"${PYENV_ROOT}\" not found, downloading project...${RST_MSG}"
+		git clone https://github.com/pyenv/pyenv.git ${PYENV_ROOT}
+        [[ $? -eq 0 ]] \
+            && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}Done!${RST_MSG}") \
+            || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}Error!${RST_MSG}")
+	else
+		[[ "${QUIET}" = "false" ]] \
+			&& echo -en "${ERR_MSG}Since \"${PYENV_ROOT}\" exists, " \
+			&& echo -e  "pyenv must be already installed. Aborting...${RST_MSG}"
+		exit 1
+	fi
+}
+
+
+function remove_from_config_file () {
+	QUIET="${1:-false}"
+    [[ "${QUIET}" = "false" ]] \
+        && echo "${INFO_MSG}Removing pyenv configuration from \"${CONFIG_FILE}\"${RST_MSG}"
+    sed -i '/# ----- BEGIN pyenv -----/,/# ----- END pyenv -----/d' "${CONFIG_FILE}"
+    [[ $? -eq 0 ]] \
+        && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}Done!${RST_MSG}" && return 0) \
+        || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}Error!${RST_MSG}" && return 1)
+}
+
+
+function add_to_config_file () {
+	QUIET="${1:-false}"
+    [[ "${QUIET}" = "false" ]] \
+        && echo "${INFO_MSG}Removing previous pyenv configuration from \"${CONFIG_FILE}\"${RST_MSG}"
+    remove_from_config_file ${QUIET}
+
+    if [[ $? -eq 0 ]]; then
+        [[ "${QUIET}" = "false" ]] \
+            && echo "${INFO_MSG}Generating pyenv configuration in \"${CONFIG_FILE}\"${RST_MSG}"
+        # pyenv configuration
+        cat <<EOF >> ${CONFIG_FILE}
+
+# ----- BEGIN pyenv -----
+export PYENV_ROOT="${PYENV_ROOT}"
+export PATH="${PYENV_ROOT}/bin:${PATH}"
+
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
+# ----- END pyenv -----
+EOF
+        [[ $? -eq 0 ]] \
+            && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}Done!${RST_MSG}") \
+            || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}Error!${RST_MSG}")
+    fi
+}
+
+
+function show_dependencies () {
+    # Debian-based distros
+    echo -e "${INFO_MSG}On Debian-based distros, you might need to install:${RST_MSG}"
+    echo -e "curl git-core gcc make zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libssl-dev"
+}
+
+
+# Run
+while getopts ":hqrs" option; do
+    case "${option}" in
+        h) usage;;
+        q) QUIET=true;;
+        r) REMOVE=true;;
+        s) show_dependencies; exit 1;;
+        *) usage 2;;
+    esac
+done
+
+if [[ "${REMOVE}" = "true" ]]; then
+    remove_pyenv ${QUIET}
+    remove_from_config_file ${QUIET}
+else
+    download_pyenv ${QUIET}
+    add_to_config_file ${QUIET}
+    show_dependencies
+fi
