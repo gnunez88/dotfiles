@@ -43,7 +43,7 @@ function remove_pyenv () {
 }
 
 
-## Downloading the project
+## Downloading the pyenv project
 function download_pyenv () {
 	QUIET="${1:-false}"
 	if [ ! -d ${PYENV_ROOT} ]; then
@@ -62,7 +62,27 @@ function download_pyenv () {
 }
 
 
-function remove_from_config_file () {
+## Downloading the pyenv-virtualenv plugin
+function download_pyenv_virtualenv () {
+	QUIET="${1:-false}"
+    VIRTUALENV="${PYENV_ROOT}/plugins/pyenv-virtualenv"
+	if [ ! -d ${VIRTUALENV} ]; then
+		[[ "${QUIET}" = "false" ]] \
+			&& echo -e "${INFO_MSG}\"${VIRTUALENV}\" not found, downloading plugin...${RST_MSG}"
+		git clone https://github.com/pyenv/pyenv-virtualenv.git ${VIRTUALENV}
+        [[ $? -eq 0 ]] \
+            && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}Done!${RST_MSG}") \
+            || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}Error!${RST_MSG}")
+	else
+		[[ "${QUIET}" = "false" ]] \
+			&& echo -en "${ERR_MSG}Since \"${VIRTUALENV}\" exists, " \
+			&& echo -e  "pyenv must be already installed. Aborting...${RST_MSG}"
+		exit 1
+	fi
+}
+
+
+function remove_pyenv_from_config_file () {
 	QUIET="${1:-false}"
     [[ "${QUIET}" = "false" ]] \
         && echo "${INFO_MSG}Removing pyenv configuration from \"${CONFIG_FILE}\"${RST_MSG}"
@@ -73,7 +93,7 @@ function remove_from_config_file () {
 }
 
 
-function add_to_config_file () {
+function add_pyenv_to_config_file () {
 	QUIET="${1:-false}"
     [[ "${QUIET}" = "false" ]] \
         && echo "${INFO_MSG}Removing previous pyenv configuration from \"${CONFIG_FILE}\"${RST_MSG}"
@@ -93,6 +113,42 @@ if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
 # ----- END pyenv -----
+EOF
+        [[ $? -eq 0 ]] \
+            && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}Done!${RST_MSG}") \
+            || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}Error!${RST_MSG}")
+    fi
+}
+
+
+function remove_pyenv_virtualenv_from_config_file () {
+	QUIET="${1:-false}"
+    [[ "${QUIET}" = "false" ]] \
+        && echo "${INFO_MSG}Removing pyenv-virtualenv configuration from \"${CONFIG_FILE}\"${RST_MSG}"
+    sed -i '/# ----- BEGIN pyenv-virtualenv -----/,/# ----- END pyenv-virtualenv -----/d' "${CONFIG_FILE}"
+    [[ $? -eq 0 ]] \
+        && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}Done!${RST_MSG}" && return 0) \
+        || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}Error!${RST_MSG}" && return 1)
+}
+
+
+function add_pyenv_virtualenv_to_config_file () {
+	QUIET="${1:-false}"
+    [[ "${QUIET}" = "false" ]] \
+        && echo "${INFO_MSG}Removing previous pyenv-virtualenv configuration from \"${CONFIG_FILE}\"${RST_MSG}"
+    remove_from_config_file ${QUIET}
+
+    if [[ $? -eq 0 ]]; then
+        [[ "${QUIET}" = "false" ]] \
+            && echo "${INFO_MSG}Generating pyenv-virtualenv configuration in \"${CONFIG_FILE}\"${RST_MSG}"
+        # pyenv configuration
+        cat <<EOF >> ${CONFIG_FILE}
+
+# ----- BEGIN pyenv-virtualenv -----
+if pyenv virtualenvs 1>/dev/null 2>&1; then
+    eval "$(pyenv-virtualenv init -)"
+fi
+# ----- END pyenv-virtualenv -----
 EOF
         [[ $? -eq 0 ]] \
             && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}Done!${RST_MSG}") \
@@ -121,9 +177,12 @@ done
 
 if [[ "${REMOVE}" = "true" ]]; then
     remove_pyenv ${QUIET}
-    remove_from_config_file ${QUIET}
+    remove_pyenv_from_config_file ${QUIET}
+    remove_pyenv_virtualenv_from_config_file ${QUIET}
 else
     download_pyenv ${QUIET}
-    add_to_config_file ${QUIET}
+    add_pyenv_to_config_file ${QUIET}
+    download_pyenv_virtualenv ${QUIET}
+    add_pyenv_virtualenv_to_config_file ${QUIET}
     show_dependencies
 fi
