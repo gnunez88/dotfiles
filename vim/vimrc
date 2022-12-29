@@ -16,10 +16,14 @@ set showcmd ruler nolist
 set cursorline
 set showmatch matchpairs+=<:>
 set hlsearch incsearch
-set tabstop=4 softtabstop=4 shiftwidth=4
+set tabstop=4 softtabstop=4
+set shiftwidth=4 shiftround
 set smarttab expandtab
 set autoindent smartindent
-set hidden autowrite autoread lazyredraw
+set autowrite autoread
+set hidden  " Hide files in the background instead of closing them
+set lazyredraw  " Do not update screen during macros/script execution
+set noerrorbells
 set formatoptions+=j
 set fileformat=unix
 set backup backupdir=${HOME}/.vim/backups
@@ -39,4 +43,5 @@ vnoremap < <gv
 vnoremap > >gv
 inoremap <C-l> <Esc>lDA
 
+set background=dark
 "colorscheme desert
