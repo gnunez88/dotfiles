@@ -1,9 +1,13 @@
 # Debugging: ssh -vT git@github.com
+# Remote: git remote add github git@github.com:<user>/<repo>.git
+# Push: git push -u github main
 Host github.com
     Hostname github.com
+    Port 22
     User git
     IdentityFile ~/.ssh/github
 Host gitlab.com
     Hostname gitlab.com
+    Port 22
     User git
     IdentityFile ~/.ssh/gitlab

@@ -1,0 +1,9 @@
+[user]
+	name = My Name
+    user = my_user
+	email = my@mail.com
+[core]
+	editor = vim
+	pager = less -X -F
+[alias]
+    lg = log --all --graph --oneline
