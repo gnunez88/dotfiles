@@ -146,7 +146,7 @@ function add_pyenv_virtualenv_to_config_file () {
 
 # ----- BEGIN pyenv-virtualenv -----
 if pyenv virtualenvs 1>/dev/null 2>&1; then
-    eval "$(pyenv-virtualenv init -)"
+    eval "$(pyenv virtualenv-init -)"
 fi
 # ----- END pyenv-virtualenv -----
 EOF

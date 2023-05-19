@@ -4,6 +4,9 @@ export TRANSFER="${HOME}/transfer"
 ## PATH
 printenv PATH | grep -q "${HOME}/\.local/bin" || PATH="${HOME}/.local/bin":$PATH
 printenv PATH | grep -q "${HOME}/go/bin" || PATH="${HOME}/go/bin":$PATH
+printenv PATH | grep -q "${HOME}/.pyenv/bin" || PATH="${HOME}/.pyenv/bin":$PATH
+printenv PATH | grep -q "${HOME}/.cargo/bin" || PATH="${HOME}/.cargo/bin":$PATH
+printenv PATH | grep -q "/opt/kotlinc/bin" || PATH="/opt/kotlinc/bin":$PATH
 MSF_EXPLOIT_TOOLS="/usr/share/metasploit-framework/tools/exploit"
 printenv PATH | grep -q "metasploit" || PATH=$PATH:"${MSF_EXPLOIT_TOOLS}"
 export PATH
