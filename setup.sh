@@ -34,6 +34,9 @@ function backup_current_settings () {
     [[ -f ${HOME}/.inputrc ]] && (mv -f ${HOME}/.inputrc{,.bak} \
         && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}${HOME}/.inputrc backed up${RST_MSG}") \
         || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}${HOME}/.inputrc could not be backed up${RST_MSG}"))
+    [[ -f ${HOME}/.p10k.zsh ]] && (mv -f ${HOME}/.p10k.zsh{,.bak} \
+        && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}${HOME}/.p10k.zsh backed up${RST_MSG}") \
+        || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}${HOME}/.p10k.zsh could not be backed up${RST_MSG}"))
     [[ -f ${HOME}/.envrc ]] && (mv -f ${HOME}/.envrc{,.bak} \
         && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}${HOME}/.envrc backed up${RST_MSG}") \
         || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}${HOME}/.envrc could not be backed up${RST_MSG}"))
@@ -52,6 +55,9 @@ function set_up_dotfiles () {
     cp  -f $(realpath $(dirname $0)/tmux.conf) ${HOME}/.tmux.conf \
         && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}${HOME}/.tmux.conf set${RST_MSG}") \
         || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}${HOME}/.tmux.conf could not be set${RST_MSG}")
+    cp  -f $(realpath $(dirname $0)/p10k.zsh) ${HOME}/.p10k.zsh \
+        && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}${HOME}/.p10k.zsh set${RST_MSG}") \
+        || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}${HOME}/.p10k.zsh could not be set${RST_MSG}")
     cp  -f $(realpath $(dirname $0)/envrc) ${HOME}/.envrc \
         && ([[ "${QUIET}" = "false" ]] && echo -e "${GOOD_MSG}${HOME}/.envrc set${RST_MSG}") \
         || ([[ "${QUIET}" = "false" ]] && echo -e "${ERR_MSG}${HOME}/.envrc could not be set${RST_MSG}")
@@ -91,6 +97,10 @@ function adding_envrc_to_shell_config () {
 # Custom environment
 ENVRC=\${HOME}/.envrc
 [[ -f \${ENVRC} && -r \${ENVRC} ]] && source \${ENVRC}
+
+# PowerLevel10k environment
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 EOF
 fi
 }
