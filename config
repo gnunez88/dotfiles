@@ -1,6 +1,9 @@
 # Debugging: ssh -vT git@github.com
 # Remote: git remote add github git@github.com:<user>/<repo>.git
 # Push: git push -u github main
+# 
+# Too many failed login issue: when you have several private keys.
+# Solution: https://www.tecmint.com/fix-ssh-too-many-authentication-failures-error/
 Host github.com
     Hostname github.com
     Port 22

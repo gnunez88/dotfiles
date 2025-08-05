@@ -14,6 +14,8 @@ export PATH
 # Aliases
 alias vim="vim -S ~/.vim/vimrc"
 alias ...="setxkbmap es dvorak -option && setxkbmap -option ctrl:swapcaps,shift:both_capslock"
+alias wget-stable="wget --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 0"
+# Better option (but manual) use: curl $URL -kLO -C - (cannot be used the first time)
 
 # Setting up the environment
 [ ! -d ${TRANSFER} ] && mkdir -p ${TRANSFER}
