@@ -2,6 +2,7 @@
 export EDITOR=vim
 export TRANSFER="${HOME}/transfer"
 ## PATH
+printenv PATH | grep -q "${HOME}/bin" || PATH="${HOME}/bin":$PATH  # Sometimes it is not there
 printenv PATH | grep -q "${HOME}/\.local/bin" || PATH="${HOME}/.local/bin":$PATH
 printenv PATH | grep -q "${HOME}/go/bin" || PATH="${HOME}/go/bin":$PATH
 printenv PATH | grep -q "${HOME}/.pyenv/bin" || PATH="${HOME}/.pyenv/bin":$PATH
@@ -93,6 +94,8 @@ if [ "${SHELL##*/}" = "zsh" ]; then
     # https://github.com/softmoth/zsh-vim-mode
 fi
 
+# Load PyEnv if installed
+which pyenv >/dev/null 2>&1 && (eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)")
 
 # Load local variables
 NONROAM="${HOME}/.nonroam"
