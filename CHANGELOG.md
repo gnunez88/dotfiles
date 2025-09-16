@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.1] - 2025-09-16
+
+### Fixed
+
+- `envrc`: removing extra parentheses for the `pyenv` configuration loading.
+
 ## [1.1.0] - 2025-09-15
 
 ### Modified

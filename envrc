@@ -95,7 +95,7 @@ if [ "${SHELL##*/}" = "zsh" ]; then
 fi
 
 # Load PyEnv if installed
-which pyenv >/dev/null 2>&1 && (eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)")
+which pyenv >/dev/null 2>&1 && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"
 
 # Load local variables
 NONROAM="${HOME}/.nonroam"
